@@ -35,10 +35,10 @@ install:
 
 test: clean build
 	${PY} tetris_bot.py ${ROOT_DIR}/Source/ROMs/Tetris.gb --quiet
-	${PY} interface_example.py
+	${PY} interface_example.py --quiet
 	${PY} -m pytest -n${THREADS} -v
 	${PYPY} tetris_bot.py ${ROOT_DIR}/Source/ROMs/Tetris.gb --quiet
-	${PYPY} interface_example.py
+	${PYPY} interface_example.py --quiet
 	${PYPY} -m pytest -n${THREADS} -v
 
 test_quick: clean build

@@ -39,6 +39,7 @@ class PyBoy:
                 profiling=False,
                 record_input_file=None,
                 disable_input=False,
+                hide_window=False,
             ):
         """
         PyBoy is loadable as an object in Python. This means, it can be initialized from another script, and be
@@ -70,7 +71,7 @@ class PyBoy:
         """
         self.gamerom_file = gamerom_file
 
-        self.window = window.window.getwindow(window_type, window_scale, debugging)
+        self.window = window.window.getwindow(window_type, window_scale, debugging, hide_window)
         self.mb = Motherboard(gamerom_file, bootrom_file, self.window, profiling=profiling)
 
         # TODO: Get rid of this extra step

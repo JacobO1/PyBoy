@@ -9,7 +9,6 @@ import sys
 import zlib
 
 import numpy as np
-
 from pyboy import PyBoy, windowevent
 
 sys.path.append(".") # Adds higher directory to python modules path.
@@ -33,7 +32,7 @@ def verify_screen_image_np(pyboy, saved_array):
 
 
 def replay(ROM, replay, window='headless', verify=True):
-    pyboy = PyBoy(ROM, window_type=window, bootrom_file=boot_rom, disable_input=True)
+    pyboy = PyBoy(ROM, window_type=window, bootrom_file=boot_rom, disable_input=True, hide_window=True)
     pyboy.set_emulation_speed(0)
     with open(replay, 'rb') as f:
         recorded_input = json.loads(zlib.decompress(f.read()).decode('ascii'))
