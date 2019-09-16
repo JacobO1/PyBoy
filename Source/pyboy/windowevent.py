@@ -33,6 +33,8 @@ All supported events to send to the emulator:
     PAUSE
     UNPAUSE
     PAUSE_TOGGLE
+    PREV_STATE
+    NEXT_STATE
 """
 
 (QUIT,
@@ -61,4 +63,6 @@ All supported events to send to the emulator:
  SCREEN_RECORDING_TOGGLE,
  PAUSE,
  UNPAUSE,
- PAUSE_TOGGLE,) = range(27)
+ PAUSE_TOGGLE,
+ PREV_STATE,
+ NEXT_STATE,) = range(29)

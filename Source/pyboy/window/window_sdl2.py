@@ -55,6 +55,8 @@ KEY_UP = {
     sdl2.SDLK_i         : windowevent.SCREEN_RECORDING_TOGGLE,
     sdl2.SDLK_ESCAPE    : windowevent.QUIT,
     sdl2.SDLK_d         : windowevent.DEBUG_TOGGLE,
+    sdl2.SDLK_COMMA     : windowevent.PREV_STATE,
+    sdl2.SDLK_PERIOD    : windowevent.NEXT_STATE,
 }
 
 
