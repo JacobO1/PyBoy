@@ -77,7 +77,6 @@ dump*.bmp
 *.gbc
 *.rom
 *.bin
-*.state
 BlarggROMs/
 TestROMs/
 ROMs/

@@ -25,6 +25,7 @@ addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
 
+
 class PyBoy:
     def __init__(
                 self,
@@ -83,7 +84,6 @@ class PyBoy:
         self.avg_emu = 0
         self.avg_cpu = 0
         self.counter = 0
-        self.stateNumber = 0
         self.set_emulation_speed(1)
         self.screen_recorder = None
         self.paused = False
@@ -159,23 +159,6 @@ class PyBoy:
                 else:
                     self.screen_recorder.save()
                     self.screen_recorder = None
-            elif event == windowevent.PREV_STATE:
-                if self.paused:
-                    self.stateNumber -= 1
-                    if self.stateNumber > 59:
-                        self.stateNumber = 59
-                    with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                        self.load_state(f)
-                    self.mb.tickframe()
-                    self.window.update_display(False)
-            elif event == windowevent.NEXT_STATE:
-                if self.paused:
-                    self.stateNumber += 1
-                    self.stateNumber %= 60
-                    with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                        self.load_state(f)
-                    self.mb.tickframe()
-                    self.window.update_display(False)
             else: # Right now, everything else is a button press
                 self.mb.buttonevent(event)
 
@@ -202,13 +185,9 @@ class PyBoy:
         if self.counter % 60 == 0:
             text = ("CPU/frame: %0.2f%% Emulation: x%d" % (self.avg_cpu/SPF*100, round(SPF/self.avg_emu)))
             self.window.set_title(text)
-            if not self.paused:
-                with open('states/saveState' + str(self.stateNumber) + '.state', 'wb') as f:
-                    self.save_state(f)
             self.counter = 0
-            self.stateNumber += 1
-            self.stateNumber %= 60
         self.counter += 1
+
         return done
 
     def stop(self, save=True):

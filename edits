@@ -1,5 +1,0 @@
-Added PREV_STATE and NEXT_STATE to windowevent.py
-Added , and . keys to window_sld2.py and mapped them to PREV_STATE and NEXT_STATE
-Added self.stateNumber in pyboy.py and pyboy.pxd and logic to save state once a second in the block starting at line 186 in pyboy.py
-created states dir under Sources
-Added event handling logic around line 162 in pyboy.py

@@ -26,7 +26,6 @@ cdef class PyBoy:
     cdef double avg_emu
     cdef double avg_cpu
     cdef unsigned int counter
-    cdef unsigned int stateNumber
     cdef bint paused
     cdef bint autopause
     cdef bint limit_emulationspeed
