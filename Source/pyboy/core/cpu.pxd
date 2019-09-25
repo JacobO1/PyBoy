@@ -6,7 +6,11 @@
 
 cimport pyboy.core.mb
 cimport opcodes
-
+# EXTENDED
+cimport cython
+import numpy as np
+cimport numpy as np
+# EXTENDED
 import cython
 
 
@@ -14,11 +18,30 @@ cdef unsigned short IF_ADDRESS, IE_ADDRESS
 cdef short FLAGC, FLAGH, FLAGN, FLAGZ
 cdef short VBLANK, LCDC, TIMER, SERIAL, HIGHTOLOW
 
+
+# EXTENDED
+cdef struct t_rewindPair:
+    void *Register
+    int value
+ctypedef t_rewindPair rewindPair
+cdef np.ndarray memArray = np.ndarray((3600),dtype=(t_rewindPair))
+cdef np.ndarray regArray = np.ndarray((3600,2),dtype=((t_rewindPair), (t_rewindPair)))
+# EXTENDED
+
 cdef (int, int) _dummy_declaration
 cdef (int, int, int, int) _dummy_declaration2
 
 
 cdef class CPU:
+
+    #EXTENDED
+    cdef bint memChange
+    cdef short tA, tF, tB, tC, tD, tE
+    cdef int tHL, tSP, tPC, retVal
+    cdef short rewindCounter, memCounter
+    cdef void *reg
+    cdef void rewindCheck(self)
+    #EXTENDED
 
     cdef public bint interrupt_master_enable, break_allow, break_on, halted, stopped, profiling
     cdef unsigned int old_pc, break_next

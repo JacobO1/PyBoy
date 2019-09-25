@@ -213,6 +213,9 @@ class Motherboard:
             raise IndexError("Memory access violation. Tried to read: %s" % hex(i))
 
     def setitem(self, i, value):
+        self.cpu.memChange = True
+        self.cpu.memAddress = i
+        self.cpu.memValue = value
         assert 0 <= value < 0x100, "Memory write error! Can't write %s to %s" % (hex(value), hex(i))
 
         if 0x0000 <= i < 0x4000: # 16kB ROM bank #0

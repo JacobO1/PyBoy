@@ -1,5 +1,22 @@
+First steps:
+
 Added PREV_STATE and NEXT_STATE to windowevent.py
 Added , and . keys to window_sld2.py and mapped them to PREV_STATE and NEXT_STATE
 Added self.stateNumber in pyboy.py and pyboy.pxd and logic to save state once a second in the block starting at line 186 in pyboy.py
 created states dir under Sources
 Added event handling logic around line 162 in pyboy.py
+
+
+Part 2:
+Created rewindArray to hold register*instruction pairs, as well as a rewindCounter. Updated cpu.pxd aswell.
+
+
+Notes:
+Wanted to expand the logic that decided which register to save a given value in. Could not, as all the instructions are hardcoded to a specific register.
+Decided to simply check all registers and PC after each operation, aswell as expanding the mb.setitem function to set a flag in the rewindArray, and save the memory address and its previous value in a seperate array. This is doable, as the performance impact measured in First Steps didn't show any noteable changes.
+
+Considered making an array which only saved necessary registers and their value pre-clock cycle. This might not be feasible, as some instructions have the capability of changing two registers in the same clock cycle. Other option is creating an array with a value for each seperate register, and simply take a snapshot of every register after every clock cycle.
+
+The implementation in which only one register-prev-value pair is saved might still work, as both registers should not be updated again within 1 clock cycle. As such, an inaccurate state will occur for one frame. The consequences of this will be unknown.
+
+Consider making a (char, char) array for registers and a (int, int, int, int) array for regVal, regVal, PCval, memChange for efficiency.

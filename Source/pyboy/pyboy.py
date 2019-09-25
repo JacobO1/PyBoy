@@ -15,7 +15,7 @@ import zlib
 
 import numpy as np
 
-from . import botsupport, window, windowevent
+from . import window, windowevent
 from .core.mb import Motherboard
 from .logger import addconsolehandler, logger
 from .opcode_to_name import CPU_COMMANDS, CPU_COMMANDS_EXT
@@ -109,6 +109,7 @@ class PyBoy:
         _Open an issue on GitHub if you need finer control, and we will take a look at it._
         """
         done = False
+        self.mb.cpu.rewindCheck()     # Save data needed to rewind game
         t_start = time.perf_counter() # Change to _ns when PyPy supports it
 
         events = self.window.get_events()

@@ -13,6 +13,7 @@ IF_ADDRESS = 0xFF0F
 IE_ADDRESS = 0xFFFF
 
 
+
 class CPU:
     def set_bc(self, x):
         assert x <= 0xFFFF, "%0.4x" % x
@@ -128,6 +129,28 @@ class CPU:
         self.SP = 0
         self.PC = 0
 
+        self.extraChars = 0
+        self.memChange = False
+        self.memAddress = 0
+        self.memValue = 0
+        self.rewindCounter = 0
+        self.memCounter = 0
+        self.tA = 0
+        self.tF = 0
+        self.tB = 0
+        self.tC = 0
+        self.tD = 0
+        self.tE = 0
+        self.tHL = 0
+        self.tSP = 0
+        self.tPC = 0
+        self.dict = {1: self.A, 2: self.F, 3: self.B, 4: self.C, 5: self.D, 6: self.E, 7: self.HL}
+        # Char array to store the registers which have changed
+        self.regArray = [[0, 0]] * 3600
+        # regArray[0].value, regArray[1].value, SP.value, PC.value, memAddress, memValue
+        self.valueArray = [[0, 0, 0, 0, 0, 0]] * 3600
+
+
         self.mb = mb
 
         self.interrupt_master_enable = False
@@ -192,3 +215,54 @@ class CPU:
             return -1
 
         return self.fetch_and_execute(self.PC)
+
+    # #EXTENDED
+    def rewindCheck(self):
+        self.extraChars = 0
+        if self.A != self.tA:
+            self.regArray[self.rewindCounter][self.extraChars] = 1          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tA  #Saves the old value of the register
+            self.tA = self.A                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.F != self.tF:
+            self.regArray[self.rewindCounter][self.extraChars] = 2          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tF  #Saves the old value of the register
+            self.tF = self.F                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.B != self.tB:
+            self.regArray[self.rewindCounter][self.extraChars] = 3          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tB  #Saves the old value of the register
+            self.tB = self.B                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.C != self.tC:
+            self.regArray[self.rewindCounter][self.extraChars] = 4          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tC  #Saves the old value of the register
+            self.tC = self.C                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.D != self.tD:
+            self.regArray[self.rewindCounter][self.extraChars] = 5          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tD  #Saves the old value of the register
+            self.tD = self.D                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.E != self.tE:
+            self.regArray[self.rewindCounter][self.extraChars] = 6          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tE  #Saves the old value of the register
+            self.tE = self.E                                                #Updates the value to check against
+            self.extraChars = 1
+        if self.HL != self.tHL:
+            self.regArray[self.rewindCounter][self.extraChars] = 7          #Saves the register which changed
+            self.valueArray[self.rewindCounter][self.extraChars] = self.tHL #Saves the old value of the register
+            self.tHL = self.HL                                              #Updates the value to check against
+            self.extraChars = 1
+        self.valueArray[self.rewindCounter][2] = self.tSP                   #Saves the old value of the register
+        self.tSP = self.SP                                                  #Updates the value to check against
+        self.valueArray[self.rewindCounter][3] = self.tPC                   #Saves the old value of the register
+        self.tPC = self.PC                                                  #Updates the value to check against
+        if self.memChange == True:
+            self.valueArray[self.memCounter][5] = self.memAddress           #Saves the address which changed
+            self.valueArray[self.memCounter][4] = self.memValue             #Saves the value which changed
+            self.memChange = False
+        self.memCounter += 1
+        self.rewindCounter += 1
+        self.memCounter %= 3600
+        self.rewindCounter %= 3600

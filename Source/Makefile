@@ -50,4 +50,3 @@ docs: clean
 	cp html/pyboy/pyboy.html ${ROOT_DIR}/docs/
 	cp -r html/pyboy/botsupport ${ROOT_DIR}/docs/
 	rm -rf html
-
