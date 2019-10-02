@@ -12,6 +12,7 @@ import io
 import json
 import time
 import zlib
+import sdl2
 
 import numpy as np
 
@@ -160,22 +161,26 @@ class PyBoy:
                     self.screen_recorder.save()
                     self.screen_recorder = None
             elif event == windowevent.PREV_STATE:
-                if self.paused:
-                    self.stateNumber -= 1
-                    if self.stateNumber > 59:
-                        self.stateNumber = 59
-                    with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                        self.load_state(f)
-                    self.mb.tickframe()
-                    self.window.update_display(False)
+                while not 22 in self.window.get_events(): # Loop breaks when a key is released.
+                    if self.paused:
+                        self.stateNumber -= 1
+                        if self.stateNumber > 3599:
+                            self.stateNumber = 3599
+                        with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
+                            self.load_state(f)
+                        print("PREV: %d" % self.stateNumber)
+                        self.mb.tickframe()
+                        self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
-                if self.paused:
-                    self.stateNumber += 1
-                    self.stateNumber %= 60
-                    with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                        self.load_state(f)
-                    self.mb.tickframe()
-                    self.window.update_display(False)
+                while not 22 in self.window.get_events(): # Loop breaks when a key is released.
+                    if self.paused:
+                        self.stateNumber += 1
+                        self.stateNumber %= 3600
+                        with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
+                            self.load_state(f)
+                        print("NEXT: %d" % self.stateNumber)
+                        self.mb.tickframe()
+                        self.window.update_display(False)
             else: # Right now, everything else is a button press
                 self.mb.buttonevent(event)
 
@@ -202,13 +207,13 @@ class PyBoy:
         if self.counter % 60 == 0:
             text = ("CPU/frame: %0.2f%% Emulation: x%d" % (self.avg_cpu/SPF*100, round(SPF/self.avg_emu)))
             self.window.set_title(text)
-            if not self.paused:
-                with open('states/saveState' + str(self.stateNumber) + '.state', 'wb') as f:
-                    self.save_state(f)
             self.counter = 0
-            self.stateNumber += 1
-            self.stateNumber %= 60
         self.counter += 1
+        if not self.paused:
+            with open('states/saveState' + str(self.stateNumber) + '.state', 'wb') as f:
+                self.save_state(f)
+            self.stateNumber += 1
+            self.stateNumber %= 3600
         return done
 
     def stop(self, save=True):
