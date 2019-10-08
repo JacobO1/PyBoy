@@ -25,6 +25,7 @@ from .screenrecorder import ScreenRecorder
 addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
+stateArr = [io.BytesIO() for _ in range(3600)]
 
 class PyBoy:
     def __init__(
@@ -166,8 +167,8 @@ class PyBoy:
                         self.stateNumber -= 1
                         if self.stateNumber > 3599:
                             self.stateNumber = 3599
-                        with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                            self.load_state(f)
+                        stateArr[self.stateNumber].seek(0)
+                        self.load_state(stateArr[self.stateNumber])
                         print("PREV: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
@@ -176,8 +177,8 @@ class PyBoy:
                     if self.paused:
                         self.stateNumber += 1
                         self.stateNumber %= 3600
-                        with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
-                            self.load_state(f)
+                        stateArr[self.stateNumber].seek(0)
+                        self.load_state(stateArr[self.stateNumber])
                         print("NEXT: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
@@ -210,8 +211,7 @@ class PyBoy:
             self.counter = 0
         self.counter += 1
         if not self.paused:
-            with open('states/saveState' + str(self.stateNumber) + '.state', 'wb') as f:
-                self.save_state(f)
+            self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
         return done
