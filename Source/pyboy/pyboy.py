@@ -12,6 +12,7 @@ import io
 import json
 import time
 import zlib
+import sdl2
 
 import numpy as np
 

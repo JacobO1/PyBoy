@@ -38,6 +38,8 @@ KEY_DOWN = {
     sdl2.SDLK_RETURN    : windowevent.PRESS_BUTTON_START,
     sdl2.SDLK_BACKSPACE : windowevent.PRESS_BUTTON_SELECT,
     sdl2.SDLK_SPACE     : windowevent.PRESS_SPEED_UP,
+    sdl2.SDLK_COMMA     : windowevent.PREV_STATE,
+    sdl2.SDLK_PERIOD    : windowevent.NEXT_STATE,
 }
 KEY_UP = {
     sdl2.SDLK_UP        : windowevent.RELEASE_ARROW_UP,
@@ -55,8 +57,6 @@ KEY_UP = {
     sdl2.SDLK_i         : windowevent.SCREEN_RECORDING_TOGGLE,
     sdl2.SDLK_ESCAPE    : windowevent.QUIT,
     sdl2.SDLK_d         : windowevent.DEBUG_TOGGLE,
-    sdl2.SDLK_COMMA     : windowevent.PREV_STATE,
-    sdl2.SDLK_PERIOD    : windowevent.NEXT_STATE,
 }
 
 
