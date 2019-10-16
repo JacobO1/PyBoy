@@ -166,7 +166,7 @@ class PyBoy:
                 while not 22 in self.window.get_events(): # Loop breaks when a key is released.
                     if self.paused:
                         self.stateNumber -= 1
-                        if self.stateNumber > 3599:
+                        if self.stateNumber > 3599 or self.stateNumber < 0:
                             self.stateNumber = 3599
                         tmpState.seek(0)
                         tmpState.write(zlib.decompress(((stateArr[self.stateNumber])).getvalue()))

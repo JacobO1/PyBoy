@@ -13,6 +13,7 @@ from pyboy.window.base_window cimport BaseWindow
 cdef (int, int) _dummy_declaration
 cdef (int, int, int, int) _dummy_declaration2
 
+
 cdef float SPF
 cdef bint argv_debug
 cdef bint argv_profiling
