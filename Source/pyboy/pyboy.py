@@ -213,7 +213,7 @@ class PyBoy:
         self.counter += 1
         if not self.paused:
             self.save_state(stateArr[self.stateNumber])
-            print(len(stateArr[self.stateNumber].getvalue()))
+            print(stateArr[self.stateNumber].getbuffer().nbytes)
             self.stateNumber += 1
             self.stateNumber %= 3600
         return done
