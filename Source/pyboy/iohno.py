@@ -1,44 +1,59 @@
 import io
+import pdb
 
-class BytesIOhNo(io.BytesIO):
+class BytesIOhNo():
 	def __init__(self):
-		super(BytesIOhNo, self).__init__()
+		self._buffer = io.BytesIO()
+		# super(BytesIOhNo, self).__init__()
 		self.counter = 0
-		self.byte = b'0'
-		self.empty = 0  #Used to ensure that all write()-data has actually been written prior to a read() call
+		self.byte = b'\x00'
+		self.empty = b'\x00'
 		self.BYTE_MAX = 255
+
+	# def write(self, data):
+	# 	return self._buffer.write(data)
+
+	# def read(self, amount):
+	# 	return self._buffer.read(amount)
+
+	def seek(self, pointer):
+		self._buffer.seek(pointer)
+
+	def flush(self):
+		if self.counter > 0:
+			rest = self.counter % self.BYTE_MAX
+			for i in range(self.counter // self.BYTE_MAX):
+				self._buffer.write(self.byte)
+				self._buffer.write(self.BYTE_MAX.to_bytes(1, "little"))
+			if (rest != 0):
+				self._buffer.write(self.byte)
+				self._buffer.write(rest.to_bytes(1, "little"))
+		self.counter = 0
 
 	def write(self, data):
 		if len(data) > 1:
-			return sum([self.write(b) for b in data])
+			return sum([self.write(hex(b)) for b in data])
 		else:
-			if data == 0x00:
+			if data == b'\x00' or data == b'0':
 				self.counter += 1
 				return 1
 			else:
-				if self.counter > 0:
-					# Flush zeros
-					rest = self.counter % self.BYTE_MAX
-					for i in range(self.counter // self.BYTE_MAX):
-						super().write(self.byte)
-						super().write(self.BYTE_MAX.to_bytes(1, "little"))
-					if (rest != 0):
-						super().write(self.byte)
-						super().write(rest.to_bytes(1, "little"))
-					self.counter = 0
+				self.flush()
 
 				# write single byte
-				return super().write(data)
+				return self._buffer.write(data)
 
 	def read(self, amount):
 		if amount > 1:
 			return sum([self.read(1) for _ in range(amount)])
 		else:
-			if self.counter != 0:
+			if self.counter > 0:
 				self.counter -= 1
-				return self.byte
+				return b'\x00'
 			else:
-				self.byte = super().read(amount)
-				if self.byte == 0x00:
-					self.counter = super().read(amount)
+				self.byte = self._buffer.read(amount)
+				if self.byte == b'\x00':
+					self.counter = int.from_bytes(self._buffer.read(amount), "little")
+					self.counter -= 1
+				assert len(self.byte) != 0
 				return self.byte

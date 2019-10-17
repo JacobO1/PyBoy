@@ -51,6 +51,7 @@ class Motherboard:
         self.lcd.save_state(f)
         self.ram.save_state(f)
         self.cartridge.save_state(f)
+        f.flush()
         logger.info("State saved.")
 
     def load_state(self, f):

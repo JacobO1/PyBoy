@@ -13,6 +13,7 @@ import json
 import time
 import zlib
 import sdl2
+import pdb
 
 import numpy as np
 
@@ -171,7 +172,10 @@ class PyBoy:
                         if self.stateNumber > 3599 or self.stateNumber < 0:
                             self.stateNumber = 3599
                         stateArr[self.stateNumber].seek(0)
-                        self.load_state(stateArr[self.stateNumber])
+                        try:
+                            self.load_state(stateArr[self.stateNumber])
+                        except:
+                            self.stateNumber += 1
                         self.mb.tickframe()
                         self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
@@ -180,7 +184,10 @@ class PyBoy:
                         self.stateNumber += 1
                         self.stateNumber %= 3600
                         stateArr[self.stateNumber].seek(0)
-                        self.load_state(stateArr[self.stateNumber])
+                        try:
+                            self.load_state(stateArr[self.stateNumber])
+                        except:
+                            self.paused ^= True
                         self.mb.tickframe()
                         self.window.update_display(False)
             else: # Right now, everything else is a button press
@@ -211,9 +218,10 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
-        if not self.paused:
+        if (self.counter % 2 == 0) and not self.paused:
+            stateArr[self.stateNumber].seek(0)
             self.save_state(stateArr[self.stateNumber])
-            print(stateArr[self.stateNumber].getbuffer().nbytes)
+            # print(stateArr[self.stateNumber]._buffer.getbuffer().nbytes)
             self.stateNumber += 1
             self.stateNumber %= 3600
         return done
