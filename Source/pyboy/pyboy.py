@@ -211,7 +211,7 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
-        if not self.paused:
+        if (self.counter %2 == 0) and not self.paused:
             self.save_state(tmpState)
             stateArr[self.stateNumber].write(zlib.compress(tmpState.getvalue()))
             print(stateArr[self.stateNumber].getbuffer().nbytes)
