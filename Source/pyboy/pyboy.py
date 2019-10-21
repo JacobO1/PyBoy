@@ -168,7 +168,6 @@ class PyBoy:
                             self.stateNumber = 3599
                         with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
                             self.load_state(f)
-                        print("PREV: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
@@ -178,7 +177,6 @@ class PyBoy:
                         self.stateNumber %= 3600
                         with open('states/saveState' + str(self.stateNumber) + '.state', 'rb') as f:
                             self.load_state(f)
-                        print("NEXT: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             else: # Right now, everything else is a button press
