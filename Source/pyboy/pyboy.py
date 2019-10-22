@@ -207,7 +207,7 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
-        if not self.paused:
+        if (self.counter %2 == 0) and not self.paused:
             with open('states/saveState' + str(self.stateNumber) + '.state', 'wb') as f:
                 self.save_state(f)
             self.stateNumber += 1
