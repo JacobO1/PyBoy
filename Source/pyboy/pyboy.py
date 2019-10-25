@@ -214,7 +214,6 @@ class PyBoy:
         if not self.paused:
             self.save_state(tmpState)
             stateArr[self.stateNumber].write(zlib.compress(tmpState.getvalue()))
-            print(len(stateArr[self.stateNumber].getvalue()))
             self.stateNumber += 1
             self.stateNumber %= 3600
         return done
