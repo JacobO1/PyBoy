@@ -26,7 +26,6 @@ addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [io.BytesIO() for _ in range(3600)]
-tmpState = io.BytesIO()
 
 class PyBoy:
     def __init__(
@@ -168,9 +167,9 @@ class PyBoy:
                         self.stateNumber -= 1
                         if self.stateNumber > 3599:
                             self.stateNumber = 3599
-                        tmpState.seek(0)
-                        tmpState.write(zlib.decompress(((stateArr[self.stateNumber])).getvalue()))
-                        self.load_state(tmpState)
+                        stateArr[self.stateNumber].seek(0)
+                        self.load_state(stateArr[self.stateNumber])
+                        print("PREV: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
@@ -178,9 +177,9 @@ class PyBoy:
                     if self.paused:
                         self.stateNumber += 1
                         self.stateNumber %= 3600
-                        tmpState.seek(0)
-                        tmpState.write(zlib.decompress(((stateArr[self.stateNumber])).getvalue()))
-                        self.load_state(tmpState)
+                        stateArr[self.stateNumber].seek(0)
+                        self.load_state(stateArr[self.stateNumber])
+                        print("NEXT: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             else: # Right now, everything else is a button press
@@ -212,8 +211,7 @@ class PyBoy:
             self.counter = 0
         self.counter += 1
         if not self.paused:
-            self.save_state(tmpState)
-            stateArr[self.stateNumber].write(zlib.compress(tmpState.getvalue()))
+            self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
         return done
