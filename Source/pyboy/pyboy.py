@@ -13,6 +13,9 @@ import json
 import time
 import zlib
 import sdl2
+import os
+import time
+import psutil
 
 import numpy as np
 
@@ -26,6 +29,8 @@ addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [io.BytesIO() for _ in range(3600)]
+time_array = [0 for _ in range(9198)]
+mem_array = [0 for _ in range(9198)]
 
 class PyBoy:
     def __init__(
@@ -210,7 +215,7 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
-        if not self.paused:
+        if (self.counter % 2 == 0) and not self.paused:
             self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
