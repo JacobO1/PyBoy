@@ -162,6 +162,11 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
+                with open("../../RLE_TIME", "w") as f:
+                    [f.write(str(x) + "\n") for x in time_array]
+                with open("../../RLE_MEM", "w") as f:
+                    [f.write(str(x) + "\n") for x in mem_array]
+                pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
                 if not self.screen_recorder:
                     self.screen_recorder = ScreenRecorder()
@@ -221,6 +226,8 @@ class PyBoy:
             self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
+        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
     def stop(self, save=True):
