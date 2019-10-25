@@ -14,6 +14,8 @@ import time
 import zlib
 import sdl2
 import pdb
+import psutil #used for memory analysis
+import os #used for memory analysis
 
 import numpy as np
 
@@ -30,6 +32,9 @@ addconsolehandler()
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [BytesIOhNo() for _ in range(3600)]
 tmpState = BytesIOhNo()
+time_array = [0 for x in range(9198)]
+mem_array = [0 for x in range(9198)]
+process = psutil.Process(os.getpid())
 
 class PyBoy:
     def __init__(
@@ -105,6 +110,7 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
+        cmpTime = time.time()
         """
         Progresses the emulator ahead by one frame.
 
@@ -122,8 +128,9 @@ class PyBoy:
             events = []
 
         if self.record_input and len(events) != 0:
-            self.recorded_input.append((self.frame_count, events, base64.b64encode(
-                np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8')))
+            self.recorded_input.append((self.frame_count, events,
+                # base64.b64encode(np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8'))  # Saves screenshot of every frame?
+                ))
         self.frame_count += 1
 
         events += self.external_input
@@ -154,11 +161,17 @@ class PyBoy:
                 self.paused = False
                 logger.info("Emulation unpaused!")
             elif event == windowevent.PAUSE_TOGGLE:
+                self.target_emulationspeed = 1
                 self.paused ^= True
                 if self.paused:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
+                with open("../../RLE_TIME", "w") as f:
+                    [f.write(str(x) + "\n") for x in time_array]
+                with open("../../RLE_MEM", "w") as f:
+                    [f.write(str(x) + "\n") for x in mem_array]
+                pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
                 if not self.screen_recorder:
                     self.screen_recorder = ScreenRecorder()
@@ -224,6 +237,8 @@ class PyBoy:
             # print(stateArr[self.stateNumber]._buffer.getbuffer().nbytes)
             self.stateNumber += 1
             self.stateNumber %= 3600
+        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
     def stop(self, save=True):

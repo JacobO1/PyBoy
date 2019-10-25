@@ -8,13 +8,14 @@ import json
 import sys
 import zlib
 
+sys.path.append(".") # Adds higher directory to python modules path.
+
 import numpy as np
 from pyboy import PyBoy, windowevent
 
-sys.path.append(".") # Adds higher directory to python modules path.
 
-
-boot_rom = "ROMs/DMG_ROM.bin"
+# boot_rom = "ROMs/DMG_ROM.bin"
+load_state_file = "../../../comparison.state"
 
 event_filter = [windowevent.PRESS_SPEED_UP, windowevent.RELEASE_SPEED_UP]
 
@@ -30,9 +31,11 @@ def verify_screen_image_np(pyboy, saved_array):
     #     breakpoint()
     return match
 
+# window='headless',
+# window_type=window,
 
-def replay(ROM, replay, window='headless', verify=True):
-    pyboy = PyBoy(ROM, window_type=window, bootrom_file=boot_rom, disable_input=True)
+def replay(ROM, replay, verify=True):
+    pyboy = PyBoy(ROM, loadstate_file=load_state_file, disable_input=True)
     pyboy.set_emulation_speed(0)
     with open(replay, 'rb') as f:
         recorded_input = json.loads(zlib.decompress(f.read()).decode('ascii'))
@@ -42,7 +45,7 @@ def replay(ROM, replay, window='headless', verify=True):
         map(lambda event_tuple: (
             event_tuple[0],
             list(filter(lambda x: x not in event_filter, event_tuple[1])),
-            event_tuple[2]
+            # event_tuple[2]
             ),
             recorded_input)
         )
@@ -54,8 +57,8 @@ def replay(ROM, replay, window='headless', verify=True):
         if next_event[0] == frame_count:
             for e in next_event[1]:
                 pyboy.send_input(e)
-                if verify:
-                    assert verify_screen_image_np(pyboy, base64.b64decode(next_event[2].encode('utf8')))
+                # if verify:
+                #     assert verify_screen_image_np(pyboy, base64.b64decode(next_event[2].encode('utf8')))
             next_event = recorded_input.pop(0)
         frame_count += 1
         pyboy.tick()
@@ -68,7 +71,7 @@ def test_pokemon():
 
 
 def test_tetris():
-    replay("ROMs/Tetris.gb", "tests/replays/tetris.replay")
+    replay("ROMs/POKEMON BLUE.gb", "../../../AD/DEMO.replay")
 
 
 def test_supermarioland():
@@ -77,3 +80,5 @@ def test_supermarioland():
 
 def test_kirby():
     replay("ROMs/Kirby.gb", "tests/replays/kirby.replay")
+
+test_tetris()
