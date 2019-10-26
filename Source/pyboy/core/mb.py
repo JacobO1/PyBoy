@@ -45,22 +45,22 @@ class Motherboard:
             self.cartridge.stop()
 
     def save_state(self, f):
-        logger.info("Saving state...")
+        # logger.info("Saving state...")
         f.write(self.bootrom_enabled.to_bytes(1, 'little'))
         self.cpu.save_state(f)
         self.lcd.save_state(f)
         self.ram.save_state(f)
         self.cartridge.save_state(f)
-        logger.info("State saved.")
+        # logger.info("State saved.")
 
     def load_state(self, f):
-        logger.info("Loading state...")
+        # logger.info("Loading state...")
         self.bootrom_enabled = ord(f.read(1))
         self.cpu.load_state(f)
         self.lcd.load_state(f)
         self.ram.load_state(f)
         self.cartridge.load_state(f)
-        logger.info("State loaded.")
+        # logger.info("State loaded.")
 
         self.window.clearcache = True
         self.window.update_cache(self.lcd)
