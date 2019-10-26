@@ -12,6 +12,10 @@ import io
 import json
 import time
 import zlib
+import os
+import time
+import psutil
+import pdb
 
 import numpy as np
 
@@ -24,6 +28,9 @@ from .screenrecorder import ScreenRecorder
 addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
+time_array = [0 for x in range(9198)]
+mem_array = [0 for x in range(9198)]
+process = psutil.Process(os.getpid())
 
 
 class PyBoy:
@@ -99,6 +106,7 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
+        cmpTime = time.time()
         """
         Progresses the emulator ahead by one frame.
 
@@ -154,6 +162,11 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
+                with open("../../IO_TIME", "w") as f:
+                    [f.write(str(x) + "\n") for x in time_array]
+                with open("../../IO_MEM", "w") as f:
+                    [f.write(str(x) + "\n") for x in mem_array]
+                pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
                 if not self.screen_recorder:
                     self.screen_recorder = ScreenRecorder()
@@ -188,6 +201,8 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
+        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        mem_array[self.frame_count -1] = process.memory_info().rss
 
         return done
 
