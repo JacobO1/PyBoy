@@ -179,6 +179,7 @@ class PyBoy:
                     self.screen_recorder.save()
                     self.screen_recorder = None
             elif event == windowevent.PREV_STATE:
+                logger.info("Rewinding...")
                 while not 22 in self.window.get_events(): # Loop breaks when a key is released.
                     if self.paused:
                         self.stateNumber -= 1
@@ -192,6 +193,7 @@ class PyBoy:
                         self.mb.tickframe()
                         self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
+                logger.info("Re-rewinding...")
                 while not 22 in self.window.get_events(): # Loop breaks when a key is released.
                     if self.paused:
                         self.stateNumber += 1

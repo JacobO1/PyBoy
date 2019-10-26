@@ -77,7 +77,7 @@ class BaseMBC:
             for byte in range(8*1024):
                 f.write(self.rambanks[bank][byte].to_bytes(1, "little"))
 
-        logger.info("RAM saved.")
+        # logger.info("RAM saved.")
 
     def load_ram(self, f):
         if not self.rambank_initialized:
@@ -88,7 +88,7 @@ class BaseMBC:
             for byte in range(8*1024):
                 self.rambanks[bank][byte] = ord(f.read(1))
 
-        logger.info("RAM loaded.")
+        # logger.info("RAM loaded.")
 
     def init_rambanks(self, n):
         if n is None:
