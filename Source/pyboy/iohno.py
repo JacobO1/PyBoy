@@ -34,13 +34,11 @@ class BytesIOhNo():
 		if len(data) > 1:
 			return sum([self.write(hex(b)) for b in data])
 		else:
-			if data == b'\x00' or data == b'0':
+			if data == b'\x00':
 				self.counter += 1
 				return 1
 			else:
 				self.flush()
-
-				# write single byte
 				return self._buffer.write(data)
 
 	def read(self, amount):
