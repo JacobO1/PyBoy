@@ -16,6 +16,7 @@ import sdl2
 import os
 import time
 import psutil
+import pdb
 
 import numpy as np
 
@@ -28,6 +29,9 @@ from .screenrecorder import ScreenRecorder
 addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
+time_array = [0 for x in range(9198)]
+mem_array = [0 for x in range(9198)]
+process = psutil.Process(os.getpid())
 
 class PyBoy:
     def __init__(
@@ -221,8 +225,8 @@ class PyBoy:
                 self.save_state(f)
             self.stateNumber += 1
             self.stateNumber %= 3600
-            time_array[self.frame_count - 1] = (time.time() - cmpTime)
-            mem_array[self.frame_count -1] = process.memory_info().rss
+        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
     def stop(self, save=True):
