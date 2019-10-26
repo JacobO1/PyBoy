@@ -158,9 +158,9 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
-                with open("../../IO_TIME", "w") as f:
+                with open("../../FILES_TIME", "w") as f:
                     [f.write(str(x) + "\n") for x in time_array]
-                with open("../../IO_MEM", "w") as f:
+                with open("../../FILES_MEM", "w") as f:
                     [f.write(str(x) + "\n") for x in mem_array]
                 pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
