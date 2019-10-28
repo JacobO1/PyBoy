@@ -107,7 +107,7 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
-        cmpTime = time.time()
+        cmpTime = time.process_time()
         """
         Progresses the emulator ahead by one frame.
 
@@ -226,7 +226,7 @@ class PyBoy:
             self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
-        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
         mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
