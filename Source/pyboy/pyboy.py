@@ -32,8 +32,8 @@ addconsolehandler()
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [BytesIOhNo() for _ in range(3600)]
 tmpState = BytesIOhNo()
-time_array = [0 for x in range(50000)]
-mem_array = [0 for x in range(50000)]
+time_array = [0 for x in range(18000)]
+mem_array = [0 for x in range(18000)]
 process = psutil.Process(os.getpid())
 
 class PyBoy:
@@ -132,6 +132,8 @@ class PyBoy:
                 # base64.b64encode(np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8'))  # Saves screenshot of every frame?
                 ))
         self.frame_count += 1
+        if self.frame_count == 18000:
+            events.append(windowevent.PAUSE_TOGGLE)
 
         events += self.external_input
         self.external_input = []
