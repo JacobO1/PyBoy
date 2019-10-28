@@ -16,8 +16,8 @@ class BytesIOhNo():
 	# def read(self, amount):
 	# 	return self._buffer.read(amount)
 
-	def seek(self, pointer):
-		self._buffer.seek(pointer)
+	def seek(self):
+		self._buffer.seek(0)
 
 	def flush(self):
 		if self.counter > 0:

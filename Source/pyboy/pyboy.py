@@ -32,8 +32,8 @@ addconsolehandler()
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [BytesIOhNo() for _ in range(3600)]
 tmpState = BytesIOhNo()
-time_array = [0 for x in range(9198)]
-mem_array = [0 for x in range(9198)]
+time_array = [0 for x in range(50000)]
+mem_array = [0 for x in range(50000)]
 process = psutil.Process(os.getpid())
 
 class PyBoy:
@@ -167,9 +167,9 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
-                with open("../../RLE_TIME", "w") as f:
+                with open("../../TEST_TIME", "w") as f:
                     [f.write(str(x) + "\n") for x in time_array]
-                with open("../../RLE_MEM", "w") as f:
+                with open("../../TEST_MEM", "w") as f:
                     [f.write(str(x) + "\n") for x in mem_array]
                 pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
@@ -185,7 +185,7 @@ class PyBoy:
                         self.stateNumber -= 1
                         if self.stateNumber > 3599 or self.stateNumber < 0:
                             self.stateNumber = 3599
-                        stateArr[self.stateNumber].seek(0)
+                        stateArr[self.stateNumber].seek()
                         try:
                             self.load_state(stateArr[self.stateNumber])
                         except:
@@ -198,7 +198,7 @@ class PyBoy:
                     if self.paused:
                         self.stateNumber += 1
                         self.stateNumber %= 3600
-                        stateArr[self.stateNumber].seek(0)
+                        stateArr[self.stateNumber].seek()
                         try:
                             self.load_state(stateArr[self.stateNumber])
                         except:
@@ -234,7 +234,7 @@ class PyBoy:
             self.counter = 0
         self.counter += 1
         if (self.counter % 2 == 0) and not self.paused:
-            stateArr[self.stateNumber].seek(0)
+            stateArr[self.stateNumber].seek()
             self.save_state(stateArr[self.stateNumber])
             # print(stateArr[self.stateNumber]._buffer.getbuffer().nbytes)
             self.stateNumber += 1
