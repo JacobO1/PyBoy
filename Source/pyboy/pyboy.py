@@ -132,8 +132,6 @@ class PyBoy:
                 # base64.b64encode(np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8'))  # Saves screenshot of every frame?
                 ))
         self.frame_count += 1
-        if self.frame_count == 18000:
-            events.append(windowevent.PAUSE_TOGGLE)
 
         events += self.external_input
         self.external_input = []
