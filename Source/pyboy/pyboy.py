@@ -29,8 +29,8 @@ addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [io.BytesIO() for _ in range(3600)]
-time_array = [0 for _ in range(9198)]
-mem_array = [0 for _ in range(9198)]
+time_array = [0 for _ in range(18000)]
+mem_array = [0 for _ in range(18000)]
 process = psutil.Process(os.getpid())
 
 class PyBoy:

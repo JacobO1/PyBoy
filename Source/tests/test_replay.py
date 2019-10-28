@@ -15,7 +15,7 @@ from pyboy import PyBoy, windowevent
 
 
 # boot_rom = "ROMs/DMG_ROM.bin"
-load_state_file = "../../../comparison.state"
+# load_state_file = "../../../comparison.state"
 
 event_filter = [windowevent.PRESS_SPEED_UP, windowevent.RELEASE_SPEED_UP]
 
@@ -33,9 +33,10 @@ def verify_screen_image_np(pyboy, saved_array):
 
 # window='headless',
 # window_type=window,
+# loadstate_file=load_state_file,
 
 def replay(ROM, replay, verify=True):
-    pyboy = PyBoy(ROM, loadstate_file=load_state_file, disable_input=True)
+    pyboy = PyBoy(ROM, disable_input=True)
     pyboy.set_emulation_speed(0)
     with open(replay, 'rb') as f:
         recorded_input = json.loads(zlib.decompress(f.read()).decode('ascii'))
