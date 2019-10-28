@@ -223,6 +223,7 @@ class PyBoy:
             self.counter = 0
         self.counter += 1
         if (self.counter % 2 == 0) and not self.paused:
+            stateArr[self.stateNumber].seek(0)
             self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
