@@ -187,7 +187,7 @@ class PyBoy:
                         self.stateNumber -= 1
                         if self.stateNumber > 3599 or self.stateNumber < 0:
                             self.stateNumber = 3599
-                        stateArr[self.stateNumber].seek()
+                        stateArr[self.stateNumber].seek(0)
                         try:
                             self.load_state(stateArr[self.stateNumber])
                         except:
@@ -200,7 +200,7 @@ class PyBoy:
                     if self.paused:
                         self.stateNumber += 1
                         self.stateNumber %= 3600
-                        stateArr[self.stateNumber].seek()
+                        stateArr[self.stateNumber].seek(0)
                         try:
                             self.load_state(stateArr[self.stateNumber])
                         except:
@@ -236,7 +236,7 @@ class PyBoy:
             self.counter = 0
         self.counter += 1
         if (self.counter % 2 == 0) and not self.paused:
-            stateArr[self.stateNumber].seek()
+            stateArr[self.stateNumber].seek(0)
             self.save_state(stateArr[self.stateNumber])
             # print(stateArr[self.stateNumber]._buffer.getbuffer().nbytes)
             self.stateNumber += 1
