@@ -8,10 +8,11 @@ import json
 import sys
 import zlib
 
+sys.path.append(".") # Adds higher directory to python modules path.
+
 import numpy as np
 from pyboy import PyBoy, windowevent
 
-sys.path.append(".") # Adds higher directory to python modules path.
 
 
 boot_rom = "ROMs/DMG_ROM.bin"
@@ -31,8 +32,8 @@ def verify_screen_image_np(pyboy, saved_array):
     return match
 
 
-def replay(ROM, replay, window='headless', verify=True):
-    pyboy = PyBoy(ROM, window_type=window, bootrom_file=boot_rom, disable_input=True)
+def replay(ROM, replay, verify=True):
+    pyboy = PyBoy(ROM, bootrom_file=boot_rom, disable_input=True)
     pyboy.set_emulation_speed(0)
     with open(replay, 'rb') as f:
         recorded_input = json.loads(zlib.decompress(f.read()).decode('ascii'))
@@ -68,7 +69,7 @@ def test_pokemon():
 
 
 def test_tetris():
-    replay("ROMs/Tetris.gb", "tests/replays/tetris.replay")
+    replay("ROMs/POKEMON BLUE.gb", "../../../AD/DEMO.replay")
 
 
 def test_supermarioland():
