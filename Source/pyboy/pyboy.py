@@ -29,8 +29,8 @@ from .screenrecorder import ScreenRecorder
 addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
-time_array = [0 for x in range(9198)]
-mem_array = [0 for x in range(9198)]
+time_array = [0 for x in range(18000)]
+mem_array = [0 for x in range(18000)]
 process = psutil.Process(os.getpid())
 
 class PyBoy:
