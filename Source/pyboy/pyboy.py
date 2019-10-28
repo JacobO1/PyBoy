@@ -106,7 +106,7 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
-        cmpTime = time.time()
+        cmpTime = time.process_time()
         """
         Progresses the emulator ahead by one frame.
 
@@ -162,9 +162,9 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
-                with open("../../IO_TIME", "w") as f:
+                with open("../../MAIN_TIME", "w") as f:
                     [f.write(str(x) + "\n") for x in time_array]
-                with open("../../IO_MEM", "w") as f:
+                with open("../../MAIN_MEM", "w") as f:
                     [f.write(str(x) + "\n") for x in mem_array]
                 pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
@@ -201,7 +201,7 @@ class PyBoy:
             self.window.set_title(text)
             self.counter = 0
         self.counter += 1
-        time_array[self.frame_count - 1] = (time.time() - cmpTime)
+        time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
         mem_array[self.frame_count -1] = process.memory_info().rss
 
         return done
