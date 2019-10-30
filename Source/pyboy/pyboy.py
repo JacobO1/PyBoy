@@ -13,9 +13,9 @@ import json
 import time
 import zlib
 import sdl2
-import pdb
-import psutil #used for memory analysis
-import os #used for memory analysis
+# import pdb
+# import psutil #used for program analysis
+# import os #used for program analysis
 
 import numpy as np
 
@@ -32,9 +32,9 @@ addconsolehandler()
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [BytesIOhNo() for _ in range(3600)]
 tmpState = BytesIOhNo()
-time_array = [0 for x in range(18000)]
-mem_array = [0 for x in range(18000)]
-process = psutil.Process(os.getpid())
+# time_array = [0 for x in range(18000)]
+# mem_array = [0 for x in range(18000)]
+# process = psutil.Process(os.getpid())
 
 class PyBoy:
     def __init__(
@@ -110,7 +110,7 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
-        cmpTime = time.process_time()
+        # cmpTime = time.process_time() - Used for program analysis
         """
         Progresses the emulator ahead by one frame.
 
@@ -129,7 +129,8 @@ class PyBoy:
 
         if self.record_input and len(events) != 0:
             self.recorded_input.append((self.frame_count, events,
-                # base64.b64encode(np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8'))  # Saves screenshot of every frame?
+                # Removed to allow saving of longer replays withoug encountering a memory error
+                # base64.b64encode(np.ascontiguousarray(self.get_screen_ndarray())).decode('utf8'))
                 ))
         self.frame_count += 1
 
@@ -167,11 +168,12 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
-                with open("../../RLE_TIME", "w") as f:
-                    [f.write(str(x) + "\n") for x in time_array]
-                with open("../../RLE_MEM", "w") as f:
-                    [f.write(str(x) + "\n") for x in mem_array]
-                pdb.set_trace()
+                # Used for program analysis
+                # with open("../../RLE_TIME", "w") as f:
+                #     [f.write(str(x) + "\n") for x in time_array]
+                # with open("../../RLE_MEM", "w") as f:
+                #     [f.write(str(x) + "\n") for x in mem_array]
+                # pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
                 if not self.screen_recorder:
                     self.screen_recorder = ScreenRecorder()
@@ -236,11 +238,11 @@ class PyBoy:
         if (self.counter % 2 == 0) and not self.paused:
             stateArr[self.stateNumber].seek(0)
             self.save_state(stateArr[self.stateNumber])
-            # print(stateArr[self.stateNumber]._buffer.getbuffer().nbytes)
             self.stateNumber += 1
             self.stateNumber %= 3600
-        time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
-        mem_array[self.frame_count -1] = process.memory_info().rss
+        # Used to save program analysis
+        # time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
+        # mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
     def stop(self, save=True):

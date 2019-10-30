@@ -4,17 +4,10 @@ import pdb
 class BytesIOhNo():
 	def __init__(self):
 		self._buffer = io.BytesIO()
-		# super(BytesIOhNo, self).__init__()
 		self.counter = 0
 		self.byte = b'\x00'
 		self.empty = b'\x00'
 		self.BYTE_MAX = 255
-
-	# def write(self, data):
-	# 	return self._buffer.write(data)
-
-	# def read(self, amount):
-	# 	return self._buffer.read(amount)
 
 	def seek(self, profiler):
 		self._buffer.seek(profiler)
