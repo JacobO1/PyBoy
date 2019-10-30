@@ -13,9 +13,10 @@ import json
 import time
 import zlib
 import sdl2
-import os
-import time
-import psutil
+# Used for program analysis
+# import os
+# import time
+# import psutil
 
 import numpy as np
 
@@ -29,9 +30,10 @@ addconsolehandler()
 
 SPF = 1/60. # inverse FPS (frame-per-second)
 stateArr = [io.BytesIO() for _ in range(3600)]
-time_array = [0 for _ in range(18000)]
-mem_array = [0 for _ in range(18000)]
-process = psutil.Process(os.getpid())
+# Used for program analysis
+# time_array = [0 for _ in range(18000)]
+# mem_array = [0 for _ in range(18000)]
+# process = psutil.Process(os.getpid())
 
 class PyBoy:
     def __init__(
@@ -107,7 +109,8 @@ class PyBoy:
         self.profiling = profiling
 
     def tick(self):
-        cmpTime = time.process_time()
+        # Used for program analysis
+        # cmpTime = time.process_time()
         """
         Progresses the emulator ahead by one frame.
 
@@ -162,11 +165,12 @@ class PyBoy:
                     logger.info("Emulation paused!")
                 else:
                     logger.info("Emulation unpaused!")
-                with open("../../IO_TIME", "w") as f:
-                    [f.write(str(x) + "\n") for x in time_array]
-                with open("../../IO_MEM", "w") as f:
-                    [f.write(str(x) + "\n") for x in mem_array]
-                pdb.set_trace()
+                # Used for program analysis
+                # with open("../../IO_TIME", "w") as f:
+                #     [f.write(str(x) + "\n") for x in time_array]
+                # with open("../../IO_MEM", "w") as f:
+                #     [f.write(str(x) + "\n") for x in mem_array]
+                # pdb.set_trace()
             elif event == windowevent.SCREEN_RECORDING_TOGGLE:
                 if not self.screen_recorder:
                     self.screen_recorder = ScreenRecorder()
@@ -181,7 +185,6 @@ class PyBoy:
                             self.stateNumber = 3599
                         stateArr[self.stateNumber].seek(0)
                         self.load_state(stateArr[self.stateNumber])
-                        print("PREV: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             elif event == windowevent.NEXT_STATE:
@@ -191,7 +194,6 @@ class PyBoy:
                         self.stateNumber %= 3600
                         stateArr[self.stateNumber].seek(0)
                         self.load_state(stateArr[self.stateNumber])
-                        print("NEXT: %d" % self.stateNumber)
                         self.mb.tickframe()
                         self.window.update_display(False)
             else: # Right now, everything else is a button press
@@ -227,8 +229,9 @@ class PyBoy:
             self.save_state(stateArr[self.stateNumber])
             self.stateNumber += 1
             self.stateNumber %= 3600
-        time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
-        mem_array[self.frame_count -1] = process.memory_info().rss
+        # Used for program analysis
+        # time_array[self.frame_count - 1] = (time.process_time() - cmpTime)
+        # mem_array[self.frame_count -1] = process.memory_info().rss
         return done
 
     def stop(self, save=True):
